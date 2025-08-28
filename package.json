@@ -1,0 +1,44 @@
+{
+    "name": "ai-driven-seo-keyword-search-tool",
+    "version": "0.1.0",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:gateway\" \"npm run dev:workers\"",
+        "dev:frontend": "npm run dev --workspace=@ai-seo-tool/frontend",
+        "dev:gateway": "npm run start:dev --workspace=@ai-seo-tool/gateway",
+        "dev:workers": "cd apps/workers && python -m uvicorn main:app --reload --port 8001",
+        "build": "npm run build --workspaces",
+        "build:frontend": "npm run build --workspace=@ai-seo-tool/frontend",
+        "build:gateway": "npm run build --workspace=@ai-seo-tool/gateway",
+        "build:shared": "npm run build --workspace=@ai-seo-tool/shared",
+        "lint": "npm run lint --workspaces",
+        "lint:fix": "npm run lint --workspaces -- --fix",
+        "type-check": "npm run type-check --workspaces",
+        "test": "npm run test --workspaces",
+        "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules apps/*/dist packages/*/dist",
+        "install:all": "npm install && cd apps/workers && pip install -r requirements.txt"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2",
+        "husky": "^8.0.3",
+        "lint-staged": "^15.2.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,ts,tsx}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "*.{json,md}": [
+            "prettier --write"
+        ]
+    }
+}

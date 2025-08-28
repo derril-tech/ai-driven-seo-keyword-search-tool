@@ -1,0 +1,21 @@
+apiVersion: v2
+name: seo-tool
+description: AI-Driven SEO Keyword Research Tool
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - seo
+  - keyword-research
+  - ai
+  - analytics
+home: https://github.com/your-org/seo-tool
+sources:
+  - https://github.com/your-org/seo-tool
+maintainers:
+  - name: Your Name
+    email: your.email@example.com
+icon: https://example.com/icon.png
+annotations:
+  category: Analytics
+  licenses: MIT

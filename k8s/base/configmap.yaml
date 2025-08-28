@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seo-tool-config
+data:
+  # Database Configuration
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "seo_tool"
+  DB_USER: "seo_user"
+  
+  # Redis Configuration
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  
+  # OpenSearch Configuration
+  OPENSEARCH_HOST: "opensearch-service"
+  OPENSEARCH_PORT: "9200"
+  
+  # ClickHouse Configuration
+  CLICKHOUSE_HOST: "clickhouse-service"
+  CLICKHOUSE_PORT: "9000"
+  
+  # NATS Configuration
+  NATS_URL: "nats://nats-service:4222"
+  
+  # S3 Configuration
+  S3_ENDPOINT: "minio-service:9000"
+  S3_BUCKET: "seo-tool-exports"
+  S3_REGION: "us-east-1"
+  
+  # Application Configuration
+  NODE_ENV: "production"
+  LOG_LEVEL: "info"
+  API_PORT: "3000"
+  FRONTEND_PORT: "3001"
+  
+  # Worker Configuration
+  WORKER_CONCURRENCY: "4"
+  WORKER_MAX_MEMORY: "2Gi"
+  
+  # Security Configuration
+  JWT_SECRET: "your-jwt-secret-here"
+  SESSION_SECRET: "your-session-secret-here"
+  
+  # Rate Limiting
+  RATE_LIMIT_WINDOW: "900000"  # 15 minutes
+  RATE_LIMIT_MAX_REQUESTS: "1000"
+  
+  # Monitoring
+  PROMETHEUS_PORT: "9090"
+  GRAFANA_PORT: "3000"
+  
+  # Health Check
+  HEALTH_CHECK_PATH: "/health"
+  READINESS_PATH: "/ready"
+  LIVENESS_PATH: "/live"

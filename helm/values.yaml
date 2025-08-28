@@ -1,0 +1,290 @@
+# Global configuration
+global:
+  environment: production
+  domain: seo-tool.com
+  apiDomain: api.seo-tool.com
+
+# Image configuration
+images:
+  frontend:
+    repository: seo-tool/frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  gateway:
+    repository: seo-tool/gateway
+    tag: latest
+    pullPolicy: IfNotPresent
+  expandWorker:
+    repository: seo-tool/expand-worker
+    tag: latest
+    pullPolicy: IfNotPresent
+  serpWorker:
+    repository: seo-tool/serp-worker
+    tag: latest
+    pullPolicy: IfNotPresent
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicas: 3
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3001
+
+# API Gateway configuration
+gateway:
+  enabled: true
+  replicas: 3
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 500m
+    limits:
+      memory: 1Gi
+      cpu: 1000m
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+
+# Worker configuration
+workers:
+  expand:
+    enabled: true
+    replicas: 2
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 500m
+      limits:
+        memory: 2Gi
+        cpu: 1000m
+  serp:
+    enabled: true
+    replicas: 2
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+
+# Database configuration
+postgres:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+  persistence:
+    enabled: true
+    size: 100Gi
+    storageClass: "fast-ssd"
+  service:
+    type: ClusterIP
+    port: 5432
+
+# Redis configuration
+redis:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  service:
+    type: ClusterIP
+    port: 6379
+
+# OpenSearch configuration
+opensearch:
+  enabled: true
+  replicas: 3
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 1000m
+    limits:
+      memory: 4Gi
+      cpu: 2000m
+  persistence:
+    enabled: true
+    size: 200Gi
+    storageClass: "fast-ssd"
+  service:
+    type: ClusterIP
+    port: 9200
+
+# ClickHouse configuration
+clickhouse:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 1000m
+    limits:
+      memory: 4Gi
+      cpu: 2000m
+  persistence:
+    enabled: true
+    size: 500Gi
+    storageClass: "fast-ssd"
+  service:
+    type: ClusterIP
+    port: 9000
+
+# NATS configuration
+nats:
+  enabled: true
+  replicas: 3
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+  service:
+    type: ClusterIP
+    port: 4222
+
+# MinIO configuration
+minio:
+  enabled: true
+  replicas: 4
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 500m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+  persistence:
+    enabled: true
+    size: 100Gi
+    storageClass: "fast-ssd"
+  service:
+    type: ClusterIP
+    port: 9000
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    replicas: 1
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClass: "fast-ssd"
+  grafana:
+    enabled: true
+    replicas: 1
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 250m
+      limits:
+        memory: 512Mi
+        cpu: 500m
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: "fast-ssd"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+  tls:
+    - secretName: seo-tool-tls
+      hosts:
+        - seo-tool.com
+        - api.seo-tool.com
+
+# Autoscaling configuration
+autoscaling:
+  enabled: true
+  frontend:
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  gateway:
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  workers:
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+# Security configuration
+security:
+  podSecurityPolicy:
+    enabled: true
+  networkPolicy:
+    enabled: true
+  rbac:
+    enabled: true
+  serviceAccount:
+    create: true
+    annotations: {}
+
+# Backup configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention: 30
+  storage:
+    type: s3
+    bucket: seo-tool-backups
+    region: us-east-1
+
+# Resource quotas
+resourceQuotas:
+  enabled: true
+  limits:
+    requests.cpu: "8"
+    requests.memory: "16Gi"
+    limits.cpu: "16"
+    limits.memory: "32Gi"
+    persistentvolumeclaims: "10"
+    services: "20"
+    secrets: "50"
+    configmaps: "50"

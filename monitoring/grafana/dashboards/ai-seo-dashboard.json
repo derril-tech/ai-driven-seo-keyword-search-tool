@@ -1,0 +1,189 @@
+{
+    "dashboard": {
+        "id": null,
+        "title": "AI SEO Tool - Main Dashboard",
+        "tags": [
+            "ai-seo",
+            "monitoring"
+        ],
+        "style": "dark",
+        "timezone": "browser",
+        "panels": [
+            {
+                "id": 1,
+                "title": "API Response Time",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])",
+                        "legendFormat": "{{method}} {{route}}"
+                    }
+                ],
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            {
+                "id": 2,
+                "title": "Request Rate",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "rate(http_requests_total[5m])",
+                        "legendFormat": "{{method}} {{route}}"
+                    }
+                ],
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 0
+                }
+            },
+            {
+                "id": 3,
+                "title": "Error Rate",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "rate(http_requests_total{status=~\"5..\"}[5m])",
+                        "legendFormat": "{{method}} {{route}}"
+                    }
+                ],
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 8
+                }
+            },
+            {
+                "id": 4,
+                "title": "Active Jobs",
+                "type": "stat",
+                "targets": [
+                    {
+                        "expr": "ai_seo_active_jobs",
+                        "legendFormat": "Active Jobs"
+                    }
+                ],
+                "gridPos": {
+                    "h": 4,
+                    "w": 6,
+                    "x": 12,
+                    "y": 8
+                }
+            },
+            {
+                "id": 5,
+                "title": "Keywords Processed",
+                "type": "stat",
+                "targets": [
+                    {
+                        "expr": "ai_seo_keywords_processed_total",
+                        "legendFormat": "Total Keywords"
+                    }
+                ],
+                "gridPos": {
+                    "h": 4,
+                    "w": 6,
+                    "x": 18,
+                    "y": 8
+                }
+            },
+            {
+                "id": 6,
+                "title": "Worker Performance",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "rate(ai_seo_worker_processing_time_seconds_sum[5m]) / rate(ai_seo_worker_processing_time_seconds_count[5m])",
+                        "legendFormat": "{{worker_type}}"
+                    }
+                ],
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 16
+                }
+            },
+            {
+                "id": 7,
+                "title": "Database Connections",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "pg_stat_database_numbackends",
+                        "legendFormat": "{{datname}}"
+                    }
+                ],
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 16
+                }
+            },
+            {
+                "id": 8,
+                "title": "Redis Memory Usage",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "redis_memory_used_bytes",
+                        "legendFormat": "Memory Used"
+                    }
+                ],
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 24
+                }
+            },
+            {
+                "id": 9,
+                "title": "OpenSearch Cluster Health",
+                "type": "stat",
+                "targets": [
+                    {
+                        "expr": "opensearch_cluster_health_status",
+                        "legendFormat": "Cluster Status"
+                    }
+                ],
+                "gridPos": {
+                    "h": 4,
+                    "w": 6,
+                    "x": 12,
+                    "y": 24
+                }
+            },
+            {
+                "id": 10,
+                "title": "SERP API Quota",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "ai_seo_serp_api_quota_remaining",
+                        "legendFormat": "Quota Remaining"
+                    }
+                ],
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 18,
+                    "y": 24
+                }
+            }
+        ],
+        "time": {
+            "from": "now-1h",
+            "to": "now"
+        },
+        "refresh": "30s"
+    }
+}
